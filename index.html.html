@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>INNER LIGHT ・ 自己分析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400;500;600&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --bg: #03050c;
+    --bg-2: #070a14;
+    --halo-1: rgba(186, 230, 253, 0.65);   /* sky-200 */
+    --halo-2: rgba(96, 165, 250, 0.45);    /* blue-400 */
+    --halo-3: rgba(59, 130, 246, 0.30);    /* blue-500 */
+    --halo-4: rgba(30, 64, 175, 0.20);     /* blue-800 */
+    --accent: #93c5fd;       /* blue-300 */
+    --accent-soft: #60a5fa;  /* blue-400 */
+    --gold: #e0e7ff;         /* indigo-100 (controlled cool gold) */
+    --text: #f8fafc;
+    --text-soft: rgba(248, 250, 252, 0.78);
+    --text-muted: rgba(248, 250, 252, 0.5);
+    --text-faint: rgba(248, 250, 252, 0.35);
+    --border: rgba(147, 197, 253, 0.22);
+    --border-soft: rgba(147, 197, 253, 0.12);
+    --font-mincho: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', '游明朝', serif;
+    --font-latin: 'Cormorant Garamond', 'Noto Serif JP', serif;
+  }
+  
+  html, body { background: var(--bg); }
+  body {
+    font-family: var(--font-mincho);
+    color: var(--text);
+    line-height: 1.9;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* ========== 背景の後光 ========== */
+  .bg-halo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 1200px;
+    height: 1200px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.35;
+  }
+  .bg-halo-core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      circle at center,
+      var(--halo-1) 0%,
+      var(--halo-2) 15%,
+      var(--halo-3) 35%,
+      var(--halo-4) 55%,
+      transparent 75%
+    );
+    border-radius: 50%;
+  }
+  
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 60px 32px 80px;
+  }
+  
+  /* ========== ヘッダー ========== */
+  .header {
+    text-align: center;
+    margin-bottom: 56px;
+    position: relative;
+  }
+  .header-mark {
+    font-family: var(--font-latin);
+    font-size: 11px;
+    letter-spacing: 8px;
+    color: var(--accent);
+    font-weight: 400;
+    margin-bottom: 18px;
+  }
+  .header-title {
+    font-size: 34px;
+    font-weight: 300;
+    letter-spacing: 12px;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .header-sub {
+    font-family: var(--font-latin);
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: var(--text-muted);
+    font-weight: 300;
+    font-style: italic;
+  }
+  .header-divider {
+    width: 60px;
+    height: 0.5px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    margin: 24px auto 0;
+  }
+  
+  /* ========== ステップインジケーター ========== */
+  .steps {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 40px;
+  }
+  .step-bar {
+    flex: 1;
+    height: 1px;
+    background: var(--border-soft);
+    transition: 0.5s;
+  }
+  .step-bar.active { background: var(--accent); height: 2px; }
+  
+  /* ========== 画面 ========== */
+  .screen { display: none; animation: fadeIn 0.6s ease; }
+  .screen.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .screen-label {
+    font-family: var(--font-latin);
+    font-size: 11px;
+    letter-spacing: 5px;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+  .screen-title {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+  }
+  .screen-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 36px;
+    letter-spacing: 1px;
+  }
+  
+  /* ========== 入力 ========== */
+  .form-group { margin-bottom: 24px; }
+  .form-label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    letter-spacing: 3px;
+  }
+  .form-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 0.5px solid var(--border);
+    color: var(--text);
+    padding: 10px 0;
+    font-size: 16px;
+    font-family: var(--font-mincho);
+    transition: 0.3s;
+  }
+  .form-input:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+  }
+  .form-input::placeholder { color: var(--text-faint); }
+  .form-input[type="date"] { color-scheme: dark; }
+  
+  /* 生年月日セレクト */
+  .birth-row { display: flex; gap: 10px; }
+  .form-select {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 0.5px solid var(--border);
+    color: var(--text);
+    padding: 10px 4px;
+    font-size: 15px;
+    font-family: var(--font-mincho);
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--accent) 50%), linear-gradient(135deg, var(--accent) 50%, transparent 50%);
+    background-position: calc(100% - 16px) calc(50% - 2px), calc(100% - 10px) calc(50% - 2px);
+    background-size: 6px 6px;
+    background-repeat: no-repeat;
+    transition: 0.3s;
+  }
+  .form-select:focus { outline: none; border-bottom-color: var(--accent); }
+  .form-select option { background: #070a14; color: var(--text); padding: 8px; }
+  .age-display {
+    font-family: var(--font-latin);
+    font-size: 13px;
+    color: var(--accent);
+    margin-top: 8px;
+    min-height: 18px;
+    letter-spacing: 2px;
+    font-style: italic;
+  }
+  
+  /* ========== 視点カード ========== */
+  .perspectives { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+  .perspective {
+    position: relative;
+    padding: 20px 22px;
+    background: rgba(255, 255, 255, 0.015);
+    border: 0.5px solid var(--border-soft);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: 0.3s;
+    overflow: hidden;
+  }
+  .perspective::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 2px;
+    height: 100%;
+    background: var(--accent);
+    transform: scaleY(0);
+    transition: 0.3s;
+    transform-origin: center;
+  }
+  .perspective:hover {
+    border-color: var(--border);
+    background: rgba(147, 197, 253, 0.03);
+  }
+  .perspective.selected {
+    border-color: var(--accent);
+    background: rgba(147, 197, 253, 0.05);
+  }
+  .perspective.selected::before { transform: scaleY(1); }
+  .perspective-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .perspective-name { font-size: 16px; font-weight: 400; letter-spacing: 3px; }
+  .perspective-en {
+    font-family: var(--font-latin);
+    font-size: 11px;
+    color: var(--text-faint);
+    letter-spacing: 2px;
+    font-style: italic;
+    margin-left: auto;
+  }
+  .perspective-desc {
+    font-size: 13px;
+    color: var(--text-soft);
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+  }
+  .perspective-source {
+    font-size: 11px;
+    color: var(--text-faint);
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+  
+  /* ========== 質問 ========== */
+  .q-counter {
+    font-family: var(--font-latin);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .q-perspective {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+  }
+  .q-text {
+    font-size: 19px;
+    font-weight: 300;
+    line-height: 1.9;
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+    min-height: 60px;
+  }
+  .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+  .option {
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.015);
+    border: 0.5px solid var(--border-soft);
+    border-radius: 2px;
+    color: var(--text);
+    font-family: var(--font-mincho);
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+    letter-spacing: 1px;
+    line-height: 1.7;
+  }
+  .option:hover {
+    border-color: var(--border);
+    background: rgba(147, 197, 253, 0.04);
+  }
+  .option.selected {
+    border-color: var(--accent);
+    background: rgba(147, 197, 253, 0.08);
+    color: var(--text);
+  }
+  .textarea {
+    width: 100%;
+    min-height: 140px;
+    background: rgba(255, 255, 255, 0.015);
+    border: 0.5px solid var(--border-soft);
+    border-radius: 2px;
+    color: var(--text);
+    font-family: var(--font-mincho);
+    font-size: 14px;
+    padding: 14px 16px;
+    line-height: 1.9;
+    letter-spacing: 0.5px;
+    resize: vertical;
+    transition: 0.3s;
+  }
+  .textarea:focus { outline: none; border-color: var(--accent); }
+  .textarea::placeholder { color: var(--text-faint); }
+  
+  /* ========== ボタン ========== */
+  .btn-row { display: flex; gap: 10px; }
+  .btn {
+    flex: 1;
+    padding: 14px 20px;
+    background: transparent;
+    border: 0.5px solid var(--border);
+    color: var(--text);
+    font-family: var(--font-mincho);
+    font-size: 13px;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 2px;
+  }
+  .btn:hover {
+    border-color: var(--accent);
+    background: rgba(147, 197, 253, 0.05);
+  }
+  .btn-primary {
+    flex: 2;
+    background: rgba(147, 197, 253, 0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .btn-primary:hover {
+    background: rgba(147, 197, 253, 0.18);
+  }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  
+  /* ========== 結果 ========== */
+  .result-hero {
+    position: relative;
+    padding: 48px 24px 36px;
+    text-align: center;
+    margin: -16px -16px 40px;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+  .result-hero-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(
+      circle at center,
+      rgba(186, 230, 253, 0.35) 0%,
+      rgba(96, 165, 250, 0.18) 30%,
+      transparent 65%
+    );
+    z-index: 0;
+  }
+  .result-hero-content { position: relative; z-index: 1; }
+  .result-mark {
+    font-family: var(--font-latin);
+    font-size: 10px;
+    letter-spacing: 6px;
+    color: var(--accent);
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+  .result-name {
+    font-size: 26px;
+    font-weight: 300;
+    letter-spacing: 6px;
+    margin-bottom: 8px;
+  }
+  .result-meta {
+    font-family: var(--font-latin);
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 3px;
+    font-style: italic;
+  }
+  
+  .result-intro {
+    padding: 24px 26px;
+    background: rgba(255, 255, 255, 0.02);
+    border-left: 1px solid var(--accent);
+    margin-bottom: 32px;
+    border-radius: 0 2px 2px 0;
+  }
+  .result-intro p {
+    font-size: 13px;
+    line-height: 2;
+    color: var(--text-soft);
+    letter-spacing: 0.5px;
+  }
+  
+  .block {
+    margin-bottom: 36px;
+    padding: 28px 24px 24px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 0.5px solid var(--border-soft);
+    border-radius: 2px;
+    position: relative;
+    overflow: hidden;
+  }
+  .block::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 240px;
+    height: 240px;
+    background: radial-gradient(
+      circle at center,
+      rgba(147, 197, 253, 0.06) 0%,
+      transparent 70%
+    );
+    border-radius: 50%;
+    z-index: 0;
+  }
+  .block-content { position: relative; z-index: 1; }
+  .block-num {
+    font-family: var(--font-latin);
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+  .block-author {
+    font-family: var(--font-latin);
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .block-title {
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    margin-bottom: 6px;
+  }
+  .block-source {
+    font-size: 11px;
+    color: var(--text-faint);
+    letter-spacing: 1px;
+    margin-bottom: 18px;
+  }
+  .block-divider {
+    height: 0.5px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin-bottom: 18px;
+  }
+  .block-body {
+    font-size: 13.5px;
+    line-height: 2.1;
+    color: var(--text-soft);
+    margin-bottom: 18px;
+    letter-spacing: 0.5px;
+  }
+  .block-data {
+    font-family: var(--font-latin);
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+    margin-bottom: 18px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 2px;
+    font-style: italic;
+  }
+  .block-question {
+    padding: 14px 18px;
+    background: rgba(147, 197, 253, 0.04);
+    border-left: 1.5px solid var(--accent);
+    border-radius: 0 2px 2px 0;
+  }
+  .q-mark {
+    font-family: var(--font-latin);
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    margin-bottom: 6px;
+    font-style: italic;
+  }
+  .q-content {
+    font-size: 13.5px;
+    line-height: 1.95;
+    color: var(--text);
+    letter-spacing: 0.5px;
+  }
+  
+  .closing {
+    margin-top: 48px;
+    text-align: center;
+    position: relative;
+    padding: 40px 16px;
+  }
+  .closing-quote {
+    font-size: 15px;
+    line-height: 2.4;
+    color: var(--text-soft);
+    letter-spacing: 2px;
+    font-weight: 300;
+  }
+  .closing-mark {
+    font-family: var(--font-latin);
+    font-size: 10px;
+    letter-spacing: 5px;
+    color: var(--accent);
+    margin-top: 20px;
+    font-style: italic;
+  }
+  
+  /* 小画面対応 */
+  @media (max-width: 600px) {
+    .container { padding: 40px 20px 60px; }
+    .header-title { font-size: 26px; letter-spacing: 8px; }
+    .q-text { font-size: 17px; }
+    .perspective-en { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-halo">
+  <svg width="100%" height="100%" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="ray" x1="0%" y1="50%" x2="100%" y2="50%">
+        <stop offset="0%" stop-color="#bae6fd" stop-opacity="0.55"/>
+        <stop offset="50%" stop-color="#60a5fa" stop-opacity="0.2"/>
+        <stop offset="100%" stop-color="#1e40af" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <g transform="translate(600 600)">
+      <!-- 48本の光線 -->
+      <g id="rays-group"></g>
+    </g>
+  </svg>
+  <div class="bg-halo-core"></div>
+</div>
+
+<div class="container">
+  
+  <header class="header">
+    <div class="header-mark">INNER LIGHT</div>
+    <h1 class="header-title">自 己 分 析</h1>
+    <div class="header-sub">A QUIET DIALOGUE WITH YOURSELF</div>
+    <div class="header-divider"></div>
+  </header>
+  
+  <div class="steps" id="steps">
+    <div class="step-bar active"></div>
+    <div class="step-bar"></div>
+    <div class="step-bar"></div>
+    <div class="step-bar"></div>
+  </div>
+  
+  <!-- ============ STEP 1 ============ -->
+  <section class="screen active" id="screen-1">
+    <div class="screen-label">STEP 01</div>
+    <h2 class="screen-title">あなたについて</h2>
+    <p class="screen-desc">基本情報をお聞かせください</p>
+    
+    <div class="form-group">
+      <label class="form-label">NAME ・ お名前</label>
+      <input type="text" class="form-input" id="name" placeholder="山田 太郎"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">BIRTH ・ 生年月日</label>
+      <div class="birth-row">
+        <select class="form-select" id="b-year"><option value="">年</option></select>
+        <select class="form-select" id="b-month"><option value="">月</option></select>
+        <select class="form-select" id="b-day"><option value="">日</option></select>
+      </div>
+      <div class="age-display" id="age-display"></div>
+    </div>
+    
+    <div class="btn-row" style="margin-top: 40px;">
+      <button class="btn btn-primary" id="to-2" style="flex: 1;">CONTINUE ・ 次へ</button>
+    </div>
+  </section>
+  
+  <!-- ============ STEP 2 ============ -->
+  <section class="screen" id="screen-2">
+    <div class="screen-label">STEP 02</div>
+    <h2 class="screen-title">見つめたい視点を選ぶ</h2>
+    <p class="screen-desc">複数選択できます ・ 心理学・自己啓発の4つの理論</p>
+    
+    <div class="perspectives">
+      <div class="perspective" data-key="freud">
+        <div class="perspective-head">
+          <span class="perspective-name">フロイト</span>
+          <span class="perspective-en">SIGMUND FREUD</span>
+        </div>
+        <p class="perspective-desc">無意識・防衛機制・幼少期の影響から、自分でも気づきにくい行動パターンを読み解く</p>
+        <p class="perspective-source">精神分析学(1900-)・『夢判断』『自我とエス』</p>
+      </div>
+      <div class="perspective" data-key="jung">
+        <div class="perspective-head">
+          <span class="perspective-name">ユング</span>
+          <span class="perspective-en">CARL JUNG</span>
+        </div>
+        <p class="perspective-desc">心理機能(内向/外向 × 思考/感情 × 感覚/直観)から、自分の認知のクセを把握する</p>
+        <p class="perspective-source">分析心理学(1921-)・『心理学的類型』(MBTIの源流)</p>
+      </div>
+      <div class="perspective" data-key="yagi">
+        <div class="perspective-head">
+          <span class="perspective-name">八木 仁平</span>
+          <span class="perspective-en">JINPEI YAGI</span>
+        </div>
+        <p class="perspective-desc">「好き(情熱)・得意(才能)・大事(価値観)」の3要素から、進みたい方向の手がかりを得る</p>
+        <p class="perspective-source">『世界一やさしい「やりたいこと」の見つけ方』(2020)</p>
+      </div>
+      <div class="perspective" data-key="eurich">
+        <div class="perspective-head">
+          <span class="perspective-name">タシャ・ユーリック</span>
+          <span class="perspective-en">TASHA EURICH</span>
+        </div>
+        <p class="perspective-desc">内的自己認識×外的自己認識の2軸4タイプで、自己理解の偏りに気づく</p>
+        <p class="perspective-source">『Insight』(2017)・組織心理学・5,000人規模の研究</p>
+      </div>
+    </div>
+    
+    <div class="btn-row">
+      <button class="btn" id="back-1">BACK</button>
+      <button class="btn btn-primary" id="to-3">START ・ 問いへ</button>
+    </div>
+  </section>
+  
+  <!-- ============ STEP 3 ============ -->
+  <section class="screen" id="screen-3">
+    <div class="q-counter" id="q-counter">Q. 01 / 15</div>
+    <div class="q-perspective" id="q-perspective">— —</div>
+    <div class="q-text" id="q-text">— —</div>
+    <div id="q-options"></div>
+    
+    <div class="btn-row" style="margin-top: 24px;">
+      <button class="btn" id="q-back">BACK</button>
+      <button class="btn btn-primary" id="q-next">NEXT</button>
+    </div>
+  </section>
+  
+  <!-- ============ STEP 4 ============ -->
+  <section class="screen" id="screen-4">
+    <div class="result-hero">
+      <div class="result-hero-bg"></div>
+      <div class="result-hero-content">
+        <div class="result-mark">— YOUR INNER LIGHT —</div>
+        <h2 class="result-name" id="r-name">— —</h2>
+        <div class="result-meta" id="r-meta">— —</div>
+      </div>
+    </div>
+    
+    <div class="result-intro">
+      <p>以下は、あなたの回答パターンから読み取れる<strong style="color:var(--accent); font-weight: 500;">傾向</strong>です。「こうである」と決めつけるものではなく、自分を眺める手がかりとして受け取ってください。各視点は、それぞれの理論が示してきた知見に基づいています。</p>
+    </div>
+    
+    <div id="r-body"></div>
+    
+    <div class="closing">
+      <p class="closing-quote" id="closing-quote">
+        — —
+      </p>
+      <div class="closing-mark" id="closing-mark">— —</div>
+    </div>
+    
+    <div class="btn-row" style="margin-top: 40px;">
+      <button class="btn btn-primary" id="restart" style="flex: 1;">RESTART ・ もう一度</button>
+    </div>
+  </section>
+  
+</div>
+
+<script>
+// ========== 後光の光線を動的生成 ==========
+(function(){
+  const g = document.getElementById('rays-group');
+  let html = '';
+  for(let a = 0; a < 360; a += 7.5){
+    html += `<rect x="0" y="-0.6" width="560" height="1.2" fill="url(#ray)" transform="rotate(${a})"/>`;
+  }
+  g.innerHTML = html;
+})();
+
+// ========== 状態 ==========
+const state = {
+  step: 1,
+  name: '',
+  birthdate: '',
+  age: null,
+  perspectives: [],
+  qIndex: 0,
+  questions: [],
+  answers: {}
+};
+
+// ========== 質問データ ==========
+// 各視点ごとに、その理論に忠実な質問を用意
+const QUESTION_BANK = {
+  freud: [
+    {
+      id:'f1',
+      text:'幼少期(おおむね6歳以前)を振り返って、最も鮮明に残っている感情の記憶は?',
+      perspective:'フロイト ・ 発達段階理論',
+      options:[
+        {v:'認められた喜び・誇らしさ', tag:'recognition'},
+        {v:'理不尽さへの怒り・抑圧', tag:'oppression'},
+        {v:'寂しさ・置いていかれた感覚', tag:'abandonment'},
+        {v:'安心・無条件の愛情', tag:'security'},
+        {v:'はっきりとは覚えていない', tag:'unclear'}
+      ]
+    },
+    {
+      id:'f2',
+      text:'他人に強く反応してしまう・我慢できないと感じる場面は?',
+      perspective:'フロイト ・ 防衛機制(投影)',
+      options:[
+        {v:'自分の話を遮られる・軽んじられる', tag:'narcissistic'},
+        {v:'他人の傲慢さ・自己中心的な態度', tag:'projection'},
+        {v:'期待に応えられなかったとき', tag:'superego'},
+        {v:'放置される・無関心を向けられる', tag:'attachment'},
+        {v:'特に強く反応する場面はない', tag:'controlled'}
+      ]
+    },
+    {
+      id:'f3',
+      text:'感情が強く揺れたとき、自分がよく取る対処は?',
+      perspective:'フロイト ・ 防衛機制',
+      options:[
+        {v:'問題そのものを考えないようにする', tag:'denial'},
+        {v:'むしろ反対の態度を取ってしまう', tag:'reaction_formation'},
+        {v:'論理的に分析しようとする', tag:'intellectualization'},
+        {v:'他のことに打ち込んで紛らわす', tag:'sublimation'},
+        {v:'別の対象に感情をぶつけてしまう', tag:'displacement'}
+      ]
+    },
+    {
+      id:'f4',
+      text:'親密な関係において、繰り返し起こりやすいパターンは?',
+      perspective:'フロイト ・ 反復強迫',
+      options:[
+        {v:'似たタイプの相手を選んでしまう', tag:'repetition'},
+        {v:'近づくと逃げたくなる', tag:'avoidance'},
+        {v:'相手に尽くしすぎてしまう', tag:'overgiving'},
+        {v:'距離が縮まると不安になる', tag:'anxiety'},
+        {v:'特にパターンは感じない', tag:'flexible'}
+      ]
+    }
+  ],
+  
+  jung: [
+    {
+      id:'j1',
+      text:'エネルギーが回復しやすいのは、どちらの時間ですか?',
+      perspective:'ユング ・ 内向/外向',
+      options:[
+        {v:'人と関わる時間・外の世界との接触', tag:'extravert'},
+        {v:'一人で過ごす時間・内省の時間', tag:'introvert'},
+        {v:'少人数の深い対話の時間', tag:'introvert_mild'},
+        {v:'状況によって全く異なる', tag:'ambivert'}
+      ]
+    },
+    {
+      id:'j2',
+      text:'物事を判断するとき、最も頼りにするのは?',
+      perspective:'ユング ・ 思考/感情',
+      options:[
+        {v:'論理的な筋道・客観的な事実', tag:'thinking'},
+        {v:'人への影響・調和への配慮', tag:'feeling'},
+        {v:'過去の経験・前例', tag:'thinking_sensing'},
+        {v:'自分の直感・違和感のなさ', tag:'intuition'}
+      ]
+    },
+    {
+      id:'j3',
+      text:'情報を受け取るとき、自然と注目するのは?',
+      perspective:'ユング ・ 感覚/直観',
+      options:[
+        {v:'具体的な事実・細部・データ', tag:'sensing'},
+        {v:'全体像・つながり・可能性', tag:'intuition'},
+        {v:'実用性・すぐに使えるか', tag:'sensing_practical'},
+        {v:'比喩や抽象的な意味', tag:'intuition_abstract'}
+      ]
+    },
+    {
+      id:'j4',
+      text:'他人にあまり見せていない自分の側面は?',
+      perspective:'ユング ・ シャドウ',
+      options:[
+        {v:'弱さ・繊細さ・脆さ', tag:'vulnerability'},
+        {v:'野心・負けず嫌い・支配欲', tag:'ambition'},
+        {v:'怒り・反発心・批判精神', tag:'anger'},
+        {v:'感受性・芸術的な側面', tag:'sensitivity'},
+        {v:'特に隠している側面はない', tag:'integrated'}
+      ]
+    }
+  ],
+  
+  yagi: [
+    {
+      id:'y1',
+      text:'時間を忘れて没頭できる活動に近いのは?(好き・情熱)',
+      perspective:'八木仁平 ・ 好きなこと',
+      options:[
+        {v:'人と深く対話する・関わる', tag:'people'},
+        {v:'何かを作る・書く・表現する', tag:'create'},
+        {v:'調べる・学ぶ・理解を深める', tag:'learn'},
+        {v:'体を動かす・体験する', tag:'experience'},
+        {v:'整える・計画する・最適化する', tag:'organize'}
+      ]
+    },
+    {
+      id:'y2',
+      text:'人からよく褒められる・頼まれることは?(得意・才能)',
+      perspective:'八木仁平 ・ 得意なこと',
+      options:[
+        {v:'気配り・共感・優しさ', tag:'empathy'},
+        {v:'発想・アイデア・独自の視点', tag:'creative'},
+        {v:'粘り強さ・継続力・最後までやる力', tag:'persistence'},
+        {v:'分かりやすく説明する力', tag:'communicate'},
+        {v:'全体をまとめる・統率する力', tag:'lead'}
+      ]
+    },
+    {
+      id:'y3',
+      text:'絶対に譲れない・大切にしたい価値観は?(大事・価値観)',
+      perspective:'八木仁平 ・ 大事なこと',
+      options:[
+        {v:'誠実さ・正直さ', tag:'integrity'},
+        {v:'自由・自分らしさ', tag:'freedom'},
+        {v:'成長・挑戦・変化', tag:'growth'},
+        {v:'つながり・愛・関係性', tag:'connection'},
+        {v:'貢献・誰かの役に立つこと', tag:'contribution'}
+      ]
+    },
+    {
+      id:'y4',
+      text:'もしお金や時間の制約がなかったら、まず何に時間を使いますか?',
+      perspective:'八木仁平 ・ 統合的問い',
+      options:[
+        {v:'誰かを助ける・育てる活動', tag:'help'},
+        {v:'深く学ぶ・専門性を高める', tag:'master'},
+        {v:'作品やプロダクトを作る', tag:'build'},
+        {v:'世界を見て回る・体験を広げる', tag:'explore'},
+        {v:'静かに自分を整える時間を持つ', tag:'rest'}
+      ]
+    }
+  ],
+  
+  eurich: [
+    {
+      id:'e1',
+      text:'自分の強みを、根拠とともに3つ挙げられますか?',
+      perspective:'ユーリック ・ 内的自己認識',
+      options:[
+        {v:'はっきり挙げられる・根拠もある', tag:'high_internal'},
+        {v:'なんとなく挙げられるが根拠は曖昧', tag:'mid_internal'},
+        {v:'他人に言われて気づくことが多い', tag:'external_dependent'},
+        {v:'よく分からない・自信がない', tag:'low_internal'}
+      ]
+    },
+    {
+      id:'e2',
+      text:'自分の評価と他人からの評価のギャップを感じることは?',
+      perspective:'ユーリック ・ 外的自己認識',
+      options:[
+        {v:'よくある・はっきり認識している', tag:'high_external'},
+        {v:'たまにある・指摘されて気づく', tag:'mid_external'},
+        {v:'あまりない・ほぼ一致している', tag:'aligned'},
+        {v:'考えたことがない・分からない', tag:'unaware'}
+      ]
+    },
+    {
+      id:'e3',
+      text:'フィードバック(批判的なものも含む)を受けたときの最初の反応は?',
+      perspective:'ユーリック ・ フィードバック受容',
+      options:[
+        {v:'受け止めて、内容を吟味する', tag:'receptive'},
+        {v:'一度は反発するが、後で考える', tag:'defensive_then_open'},
+        {v:'落ち込みやすい・自己否定に傾く', tag:'self_critical'},
+        {v:'すぐに行動・修正に移る', tag:'action'},
+        {v:'感情はあまり動かない', tag:'detached'}
+      ]
+    },
+    {
+      id:'e4',
+      text:'自分を振り返る時間を、意識的に持っていますか?',
+      perspective:'ユーリック ・ リフレクション習慣',
+      options:[
+        {v:'日課として持っている(日記など)', tag:'daily'},
+        {v:'週に数回、時間を取る', tag:'weekly'},
+        {v:'節目や悩んだときに振り返る', tag:'occasional'},
+        {v:'ほとんど振り返ることはない', tag:'rare'},
+        {v:'振り返り方が分からない', tag:'unknown'}
+      ]
+    }
+  ]
+};
+
+// ========== ヘルパー関数 ==========
+function calcAge(dateStr){
+  if(!dateStr) return null;
+  const b = new Date(dateStr);
+  const t = new Date();
+  let age = t.getFullYear() - b.getFullYear();
+  const m = t.getMonth() - b.getMonth();
+  if(m < 0 || (m === 0 && t.getDate() < b.getDate())) age--;
+  return (age >= 0 && age < 150) ? age : null;
+}
+
+function goTo(step){
+  state.step = step;
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + step).classList.add('active');
+  document.querySelectorAll('#steps .step-bar').forEach((b, i) => {
+    if(i < step) b.classList.add('active'); else b.classList.remove('active');
+  });
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// ========== STEP 1: 生年月日セレクトボックスを生成 ==========
+(function initBirthSelects(){
+  const yearSel = document.getElementById('b-year');
+  const monthSel = document.getElementById('b-month');
+  const daySel = document.getElementById('b-day');
+  const thisYear = new Date().getFullYear();
+  // 年:今年から120年前まで
+  for(let y = thisYear; y >= thisYear - 120; y--){
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y + '年';
+    yearSel.appendChild(opt);
+  }
+  // 月
+  for(let m = 1; m <= 12; m++){
+    const opt = document.createElement('option');
+    opt.value = m;
+    opt.textContent = m + '月';
+    monthSel.appendChild(opt);
+  }
+  // 日(初期は31日まで)
+  function fillDays(maxDay){
+    daySel.innerHTML = '<option value="">日</option>';
+    for(let d = 1; d <= maxDay; d++){
+      const opt = document.createElement('option');
+      opt.value = d;
+      opt.textContent = d + '日';
+      daySel.appendChild(opt);
+    }
+  }
+  fillDays(31);
+  
+  function updateBirthdate(){
+    const y = yearSel.value, m = monthSel.value, d = daySel.value;
+    // 月の日数を更新
+    if(y && m){
+      const daysInMonth = new Date(y, m, 0).getDate();
+      const currentDay = parseInt(d);
+      fillDays(daysInMonth);
+      // 既に選択していた日を復元(範囲内なら)
+      if(currentDay && currentDay <= daysInMonth) daySel.value = currentDay;
+    }
+    if(y && m && daySel.value){
+      const mm = String(m).padStart(2,'0');
+      const dd = String(daySel.value).padStart(2,'0');
+      state.birthdate = `${y}-${mm}-${dd}`;
+      state.age = calcAge(state.birthdate);
+      document.getElementById('age-display').textContent = state.age !== null ? `${state.age} years old` : '';
+    } else {
+      state.birthdate = '';
+      state.age = null;
+      document.getElementById('age-display').textContent = '';
+    }
+  }
+  
+  yearSel.addEventListener('change', updateBirthdate);
+  monthSel.addEventListener('change', updateBirthdate);
+  daySel.addEventListener('change', updateBirthdate);
+})();
+
+document.getElementById('name').addEventListener('input', e => state.name = e.target.value.trim());
+document.getElementById('to-2').addEventListener('click', () => {
+  if(!state.name){ alert('お名前を入力してください'); return; }
+  if(!state.birthdate){ alert('生年月日を入力してください'); return; }
+  goTo(2);
+});
+
+// ========== STEP 2 ==========
+document.querySelectorAll('.perspective').forEach(el => {
+  el.addEventListener('click', () => {
+    const key = el.dataset.key;
+    el.classList.toggle('selected');
+    if(el.classList.contains('selected')){
+      if(!state.perspectives.includes(key)) state.perspectives.push(key);
+    } else {
+      state.perspectives = state.perspectives.filter(k => k !== key);
+    }
+  });
+});
+document.getElementById('back-1').addEventListener('click', () => goTo(1));
+document.getElementById('to-3').addEventListener('click', () => {
+  if(state.perspectives.length === 0){ alert('1つ以上の視点を選んでください'); return; }
+  buildQuestions();
+  state.qIndex = 0;
+  renderQuestion();
+  goTo(3);
+});
+
+// 質問構築:選択視点から取り出して合計15問程度に
+function buildQuestions(){
+  const sel = state.perspectives;
+  const perCount = Math.ceil(15 / sel.length);
+  let pool = [];
+  sel.forEach(k => {
+    pool = pool.concat(QUESTION_BANK[k].slice(0, Math.min(perCount, 4)));
+  });
+  if(pool.length > 15) pool = pool.slice(0, 15);
+  state.questions = pool;
+}
+
+// ========== STEP 3 ==========
+function renderQuestion(){
+  const q = state.questions[state.qIndex];
+  const total = state.questions.length;
+  document.getElementById('q-counter').textContent = `Q. ${String(state.qIndex+1).padStart(2,'0')} / ${String(total).padStart(2,'0')}`;
+  document.getElementById('q-perspective').textContent = q.perspective;
+  document.getElementById('q-text').textContent = q.text;
+  
+  const optWrap = document.getElementById('q-options');
+  optWrap.className = 'options';
+  optWrap.innerHTML = q.options.map(o => {
+    const sel = state.answers[q.id] === o.tag ? ' selected' : '';
+    return `<button class="option${sel}" data-tag="${o.tag}" data-v="${o.v.replace(/"/g,'&quot;')}">${o.v}</button>`;
+  }).join('');
+  
+  optWrap.querySelectorAll('.option').forEach(b => {
+    b.addEventListener('click', () => {
+      optWrap.querySelectorAll('.option').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      state.answers[q.id] = b.dataset.tag;
+      state.answers[q.id + '_v'] = b.dataset.v;
+    });
+  });
+  
+  document.getElementById('q-back').textContent = state.qIndex === 0 ? '← 視点選択' : '← 前の問い';
+  document.getElementById('q-next').textContent = state.qIndex === total - 1 ? '分析を見る →' : '次の問い →';
+}
+
+document.getElementById('q-back').addEventListener('click', () => {
+  if(state.qIndex === 0) goTo(2);
+  else { state.qIndex--; renderQuestion(); }
+});
+document.getElementById('q-next').addEventListener('click', () => {
+  const q = state.questions[state.qIndex];
+  if(!state.answers[q.id]){
+    if(!confirm('回答せずに次へ進みますか?')) return;
+  }
+  if(state.qIndex < state.questions.length - 1){
+    state.qIndex++;
+    renderQuestion();
+  } else {
+    renderResult();
+    goTo(4);
+  }
+});
+
+// ========== STEP 4 ・ 結果生成 ==========
+function renderResult(){
+  document.getElementById('r-name').textContent = state.name;
+  const today = new Date().toLocaleDateString('ja-JP', {year:'numeric', month:'2-digit', day:'2-digit'}).replace(/\//g,'.');
+  document.getElementById('r-meta').textContent = `${state.age} years ・ ${today}`;
+  
+  const body = document.getElementById('r-body');
+  let html = '';
+  state.perspectives.forEach((k, i) => {
+    const block = generateBlock(k, i);
+    if(block) html += renderBlock(block, i);
+  });
+  body.innerHTML = html;
+  
+  // 格言をランダム表示
+  renderQuote();
+}
+
+function renderBlock(b, i){
+  return `<div class="block">
+    <div class="block-content">
+      <div class="block-num">0${i+1}</div>
+      <div class="block-author">${b.author}</div>
+      <div class="block-title">${b.title}</div>
+      <div class="block-source">${b.source}</div>
+      <div class="block-divider"></div>
+      <p class="block-body">${b.body}</p>
+      ${b.data ? `<div class="block-data">${b.data}</div>` : ''}
+      <div class="block-question">
+        <div class="q-mark">A QUESTION TO SIT WITH</div>
+        <p class="q-content">${b.question}</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ========== 分析ロジック ・ 各理論に忠実な根拠ベースの分析 ==========
+function generateBlock(key, idx){
+  const a = state.answers;
+  
+  if(key === 'freud'){
+    const childhood = a.f1 || '';
+    const trigger = a.f2 || '';
+    const defense = a.f3 || '';
+    const pattern = a.f4 || '';
+    
+    let body = 'フロイトは、人の行動の多くが意識下では捉えきれない動機(無意識)に動かされていると論じました。とくに幼少期の体験と防衛機制(無意識的な心の防衛反応)が、現在の対人関係や選択に影響することを示しています。';
+    
+    const insights = [];
+    if(childhood === 'recognition') insights.push('幼少期に「認められる」体験が強く刻まれている場合、現在も承認欲求が選択の動機になりやすい傾向が指摘されています。');
+    else if(childhood === 'oppression') insights.push('幼少期の理不尽さの記憶は、フロイトのいう「権威への両価感情」として現れやすく、強い相手への反発や、逆に従順さの両方を生むことがあります。');
+    else if(childhood === 'abandonment') insights.push('「置いていかれた」感覚は、後の愛着スタイル研究(ボウルビィ・エインズワース)でも、対人関係の不安傾向との関連が示されています。');
+    else if(childhood === 'security') insights.push('幼少期の安心感は、後の研究(安定型愛着)で対人関係の安定性と相関することが報告されています。');
+    
+    if(trigger === 'projection') insights.push('他人の「傲慢さ・自己中心性」に強く反応するときは、フロイトのいう「投影」── 自分の中で認めたくない欲求を他者に見出している可能性が、臨床的にしばしば指摘されます。');
+    else if(trigger === 'narcissistic') insights.push('「軽んじられる」ことへの強い反応は、自己愛(ナルシシズム)の繊細な側面と関連することがあります。これは病的なものではなく、誰しもが持つ正常な心の機能です。');
+    else if(trigger === 'superego') insights.push('「期待に応えられない」ことへの強い反応は、フロイトの構造論でいう「超自我」(内面化された規範)の働きが強いことを示唆します。');
+    
+    const defenseMap = {
+      denial:'抑圧・否認(unaware に押しやる)',
+      reaction_formation:'反動形成(本心と逆の態度を取る)',
+      intellectualization:'知性化(感情を論理に変換する)',
+      sublimation:'昇華(別の建設的活動に転換する)── これは最も成熟した防衛機制とされます',
+      displacement:'置き換え(別の対象に感情を向ける)'
+    };
+    if(defenseMap[defense]) insights.push(`感情への対処パターンは「${defenseMap[defense]}」に近いようです。`);
+    
+    return {
+      author:'SIGMUND FREUD (1856-1939)',
+      title:'無意識という地下水脈',
+      source:'精神分析学・防衛機制論・反復強迫',
+      body: body + ' あなたの回答からは、以下のような傾向が読み取れます。' + insights.join(''),
+      data:'※ フロイトの理論は20世紀以降、エビデンスベースの心理療法(認知行動療法など)に主流の座を譲りましたが、防衛機制・無意識の影響・幼少期の重要性といった概念は、現代の発達心理学・精神医学にも継承されています。',
+      question: childhood === 'oppression' 
+        ? '今あなたが「絶対に許せない」と強く反応するものは、過去のあなた自身が我慢してきたものではありませんか?'
+        : (defense === 'intellectualization' ? 'あなたが論理的に整理した感情の「下」には、まだ言葉になっていない何があるでしょうか?'
+        : 'あなたが繰り返している人間関係のパターンに、もし「ルーツ」があるとしたら、どこに源泉がありそうですか?')
+    };
+  }
+  
+  if(key === 'jung'){
+    const ei = a.j1 || '';
+    const tf = a.j2 || '';
+    const sn = a.j3 || '';
+    const shadow = a.j4 || '';
+    
+    // 心理機能タイプの判定
+    let type = '';
+    let typeDesc = '';
+    if(ei.includes('introvert') || ei === 'introvert' || ei === 'introvert_mild'){
+      type += '内向(I)';
+      typeDesc += '関心が内側の世界(思考・感情・概念)に向かいやすい傾向。';
+    } else if(ei === 'extravert'){
+      type += '外向(E)';
+      typeDesc += '関心が外側の世界(人・出来事・行動)に向かいやすい傾向。';
+    } else {
+      type += 'バランス型(I/E)';
+      typeDesc += '状況によって内向・外向のモードを使い分ける柔軟性。';
+    }
+    
+    if(sn === 'sensing' || sn === 'sensing_practical'){
+      type += ' × 感覚(S)';
+      typeDesc += ' 具体的な事実・経験・現実から情報を得るタイプ。';
+    } else if(sn === 'intuition' || sn === 'intuition_abstract'){
+      type += ' × 直観(N)';
+      typeDesc += ' パターン・可能性・全体像から情報を得るタイプ。';
+    }
+    
+    if(tf === 'thinking' || tf === 'thinking_sensing'){
+      type += ' × 思考(T)';
+      typeDesc += ' 判断の軸は論理・客観性。';
+    } else if(tf === 'feeling'){
+      type += ' × 感情(F)';
+      typeDesc += ' 判断の軸は人間関係への影響・調和。';
+    } else if(tf === 'intuition'){
+      type += ' × 直観的判断';
+      typeDesc += ' 判断は説明しがたい「ぴったり感」に依拠。';
+    }
+    
+    let body = `ユングは1921年の『心理学的類型』で、人の認知のクセを「内向/外向」「思考/感情」「感覚/直観」の3軸で類型化しました(MBTIの理論的基盤)。あなたの回答は <strong style="color:var(--accent); font-weight:500;">${type}</strong> に近い特徴を示しています。${typeDesc}`;
+    
+    const shadowMap = {
+      vulnerability:'「弱さ・繊細さ」を見せにくい場合、ユングはこれを「シャドウ」── 自分が認めたくない側面が無意識に押し込められた領域 ── と呼びました。シャドウは抑圧されるほど、他者に投影されやすくなります(他人の弱さに過敏になる等)。',
+      ambition:'「野心・支配欲」を表に出しにくいとき、それは社会的期待(ペルソナ)が強い証でもあります。健全な野心が表出できないと、別の形(批判・嫉妬)に変形することがあります。',
+      anger:'「怒り・批判精神」を抑え込む傾向は、表面の調和を保つ一方、長期的には消耗や、突然の爆発につながることが知られています。',
+      sensitivity:'感受性を隠す傾向がある場合、社会で適応するために「合理的な仮面」を被っている可能性があります。'
+    };
+    const shadowInsight = shadowMap[shadow] || '';
+    
+    return {
+      author:'CARL GUSTAV JUNG (1875-1961)',
+      title:'心理機能と、隠れた側面',
+      source:'分析心理学・心理学的類型(1921)・MBTIの源流',
+      body: body + (shadowInsight ? '<br><br>' + shadowInsight : ''),
+      data:`※ MBTIは現代では「タイプを固定的に捉えるべきではない」「個人内の変動も大きい」という批判があります。あくまで「現時点でのクセの傾向」として参照してください。実際、ユング自身も類型を「便宜的な目印」と位置づけていました。`,
+      question: shadow ? 'あなたが今「自分らしくない」と感じている側面こそ、これから統合していくべき自分の一部かもしれません。それは、どんな顔をしていますか?' : '今のあなたの「強み」を一つ反転させると、どんな側面が見えてきますか?'
+    };
+  }
+  
+  if(key === 'yagi'){
+    const love = a.y1_v || '';
+    const skill = a.y2_v || '';
+    const value = a.y3_v || '';
+    const wish = a.y4_v || '';
+    
+    let body = '八木仁平氏が提唱する自己理解メソッドは、「やりたいこと」を以下の3要素の重なりで定義します:<br><br>';
+    body += '<strong style="color:var(--accent); font-weight:500;">① 好きなこと(情熱)</strong>= 興味があり、もっと深めたいと感じる分野<br>';
+    body += '<strong style="color:var(--accent); font-weight:500;">② 得意なこと(才能)</strong>= 無意識にできて、人より上手にできる行動<br>';
+    body += '<strong style="color:var(--accent); font-weight:500;">③ 大事なこと(価値観)</strong>= 人生で大切にしたい状態・在り方<br><br>';
+    body += 'あなたの回答からは、次の輪郭が読み取れます。';
+    body += `<br><br>・ 没頭できる分野は「${love}」に近い領域<br>`;
+    body += `・ 強みとして表れているのは「${skill}」<br>`;
+    body += `・ 譲れない価値観の中心は「${value}」<br>`;
+    body += `・ 制約がなければ向かいたい方向は「${wish}」`;
+    
+    body += '<br><br>この4つが、ある方向を指し示しているか、それともバラバラに散らばっているかは、回答を眺め直すと見えてきます。八木メソッドでは、これらが重なる点に「本当にやりたいこと」が現れるとされています。';
+    
+    return {
+      author:'JINPEI YAGI ・ 八木 仁平',
+      title:'やりたいことの三要素',
+      source:'『世界一やさしい「やりたいこと」の見つけ方』(2020)',
+      body: body,
+      data:`※ 八木メソッドは「やりたいことは探すものではなく、自分の中の3要素から組み立てるもの」とする実用的フレームワーク。Self-Determination Theory(自己決定理論・Deci & Ryan)など、内発的動機づけの研究とも親和性があります。`,
+      question: 'もし今日、あなたが挙げた「好き × 得意 × 大事」がすべて満たされる1時間を持てるとしたら、具体的に何をしていますか?その「具体的な活動」が、あなたのやりたいことの種かもしれません。'
+    };
+  }
+  
+  if(key === 'eurich'){
+    const internal = a.e1 || '';
+    const external = a.e2 || '';
+    const feedback = a.e3 || '';
+    const reflect = a.e4 || '';
+    
+    // 4タイプ判定
+    const highInternal = (internal === 'high_internal' || internal === 'mid_internal');
+    const highExternal = (external === 'high_external' || external === 'mid_external');
+    
+    let typeLabel, typeDesc;
+    if(highInternal && highExternal){
+      typeLabel = 'AWARE(自覚者)';
+      typeDesc = 'タシャ・ユーリックの研究で、内的・外的の両方の自己認識が高い「自覚者」に該当する可能性があります。研究では、この層は全体の約10-15%とされ、最もリーダーシップ評価・幸福度・人間関係の質が高い群です。';
+    } else if(highInternal && !highExternal){
+      typeLabel = 'INTROSPECTOR(内省者)';
+      typeDesc = '自分のことはよく見えているが、他人から自分がどう見えているかは盲点になりやすい「内省者」タイプ。自己理解の自信と、外部からの実際の見え方にズレが生じやすい傾向。';
+    } else if(!highInternal && highExternal){
+      typeLabel = 'PLEASER(他者意識者)';
+      typeDesc = '他人からどう見られているかは把握しているが、自分自身の価値観・感情への内省が薄い「他者意識者」タイプ。他者基準で動きすぎて疲弊することがあります。';
+    } else {
+      typeLabel = 'SEEKER(探求者)';
+      typeDesc = '内的・外的いずれの自己認識も発展途上にある「探求者」タイプ。これは決して悪いことではなく、自己認識を意図的に育てる伸びしろが大きい状態です。';
+    }
+    
+    let body = `タシャ・ユーリックは組織心理学者として、5,000人以上を対象に自己認識を研究し、それを「内的自己認識(自分の価値観・感情・強みへの理解)」と「外的自己認識(他人から自分がどう見えているかの理解)」の2軸で整理しました。<br><br>あなたの回答からは、<strong style="color:var(--accent); font-weight:500;">「${typeLabel}」</strong>に近い傾向が読み取れます。<br><br>${typeDesc}`;
+    
+    const feedbackMap = {
+      receptive:'フィードバックを冷静に吟味できる姿勢は、自己認識を育てる最大の武器とユーリックは指摘しています。',
+      defensive_then_open:'最初は防衛が立ち上がるが、後で考え直せる ── これは健全な反応です。即座に受け入れる人より、長期的に深い学びを得やすいことが研究で示されています。',
+      self_critical:'フィードバックで自己否定に傾きやすい場合、「自分」と「行動」を分ける視点(ユーリックの推奨技法)を意識すると、痛みが学びに変わりやすくなります。',
+      detached:'感情が動かないことは、防衛的に閉じている可能性も、すでに統合済みの可能性も両方ありえます。'
+    };
+    if(feedbackMap[feedback]) body += '<br><br>' + feedbackMap[feedback];
+    
+    const reflectMap = {
+      daily:'日常的な振り返りはすでに大きな資産です。ただし、ユーリックは「Why?(なぜ)」と問うのではなく「What?(何が)」と問うことを推奨しています(「Why」は内省を反芻に変えやすい)。',
+      weekly:'週次の振り返り習慣は、ユーリックの研究でも自己認識を高める実証的に有効な習慣です。',
+      occasional:'節目だけの振り返りは断片的になりがちです。短くても定期的なほうが効果的とされています。',
+      rare:'振り返りを増やすこと自体が、最も効果的な自己認識への投資になります。週10分のジャーナリングからでも始められます。',
+      unknown:'振り返り方が分からないときは、ユーリックの「What?」型質問(例:「今週、何が一番うまくいった?」「何に最もエネルギーを感じた?」)から試すと入りやすいでしょう。'
+    };
+    if(reflectMap[reflect]) body += '<br><br>' + reflectMap[reflect];
+    
+    return {
+      author:'TASHA EURICH, PhD',
+      title:'2軸で見る、自己認識の地図',
+      source:'『Insight』(2017)・組織心理学・5,000人規模の実証研究',
+      body: body,
+      data:'※ Eurich (2018) の研究では「95%の人は自分が自己認識力があると思っているが、実際にそう言えるのは10-15%」というギャップが報告されています。重要なのは「自分にも盲点があるかもしれない」と前提することです。',
+      question: 'ユーリックが推奨する問いを試してみてください ── 「なぜ私はこうなのか?」ではなく、<br>「今、私の中で何が起きているのか?」── この問い方を変えるだけで、見えるものが変わります。'
+    };
+  }
+  
+  return null;
+}
+
+// ========== 格言データ ・ 心理学・哲学・自己理解にまつわる実在の言葉 ==========
+const QUOTES = [
+  {
+    text: '自分を知ることは、<br>自分を限定することではなく、<br>まだ気づいていない可能性に、<br>光を当てていくこと。',
+    by: 'INNER LIGHT'
+  },
+  {
+    text: '自分が何者であるかを見極めるためには、<br>自分の心の中を見つめなさい。',
+    by: 'CARL JUNG ・ カール・ユング'
+  },
+  {
+    text: '自分自身に光を当てない者は、<br>他人の影となる。',
+    by: 'CARL JUNG ・ カール・ユング'
+  },
+  {
+    text: '本当に知ることは、自分が知らないと<br>知ることである。',
+    by: 'SOCRATES ・ ソクラテス'
+  },
+  {
+    text: '人生で最も難しいことは、<br>自分自身を知ることである。',
+    by: 'THALES ・ タレス'
+  },
+  {
+    text: '汝自身を知れ。',
+    by: 'DELPHIC MAXIM ・ デルフォイの神託'
+  },
+  {
+    text: '私たちは、自分が考えている通りの<br>人間になる。',
+    by: 'EARL NIGHTINGALE'
+  },
+  {
+    text: '無意識を意識化しない限り、<br>それはあなたの人生を支配し続け、<br>あなたはそれを運命と呼ぶだろう。',
+    by: 'CARL JUNG ・ カール・ユング'
+  },
+  {
+    text: '人は、自分が見たくないものこそ、<br>最も深く学ぶ必要がある。',
+    by: 'CARL JUNG ・ カール・ユング'
+  },
+  {
+    text: '夢は、無意識への王道である。',
+    by: 'SIGMUND FREUD ・ ジークムント・フロイト'
+  },
+  {
+    text: '完全な人間になることではなく、<br>全体的な人間になることが大切だ。',
+    by: 'CARL JUNG ・ カール・ユング'
+  },
+  {
+    text: '幸福とは、自分が<br>誰であるかを知ることである。',
+    by: 'TASHA EURICH ・ タシャ・ユーリック'
+  },
+  {
+    text: '内省は、振り返ることではなく、<br>気づきを得ることである。',
+    by: 'TASHA EURICH ・ タシャ・ユーリック'
+  },
+  {
+    text: 'やりたいことは、<br>探すものではなく、<br>自分の中から組み立てるもの。',
+    by: 'JINPEI YAGI ・ 八木 仁平'
+  },
+  {
+    text: '人は、自分が変わることでしか、<br>世界の見え方を変えられない。',
+    by: 'INNER LIGHT'
+  },
+  {
+    text: '自分の影を恐れず歩く者だけが、<br>自分の光を見つけられる。',
+    by: 'INNER LIGHT'
+  },
+  {
+    text: '答えを急ぐな。<br>問いとともに、しばらく生きなさい。',
+    by: 'RAINER MARIA RILKE ・ リルケ'
+  },
+  {
+    text: '人生は、解くべき問題ではなく、<br>経験すべき神秘である。',
+    by: 'SØREN KIERKEGAARD ・ キェルケゴール'
+  },
+  {
+    text: '他人と比較する限り、<br>あなたは自分自身を見失う。',
+    by: 'LAO TZU ・ 老子'
+  },
+  {
+    text: '自分を受け入れることは、<br>変化の出発点である。',
+    by: 'CARL ROGERS ・ カール・ロジャーズ'
+  }
+];
+
+function pickRandomQuote(){
+  return QUOTES[Math.floor(Math.random() * QUOTES.length)];
+}
+
+function renderQuote(){
+  const q = pickRandomQuote();
+  document.getElementById('closing-quote').innerHTML = q.text;
+  document.getElementById('closing-mark').textContent = '— ' + q.by;
+}
+document.getElementById('restart').addEventListener('click', () => {
+  showConfirmModal();
+});
+// カスタム確認モーダル
+function showConfirmModal(){
+  const overlay = document.createElement('div');
+  overlay.id = 'confirm-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(3,5,12,0.85);display:flex;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(8px);';
+  overlay.innerHTML = `
+    <div style="background:#070a14;border:0.5px solid var(--accent);padding:40px 32px;max-width:360px;width:90%;border-radius:4px;text-align:center;box-shadow:0 0 60px rgba(147,197,253,0.15);">
+      <div style="font-family:var(--font-latin);font-size:11px;letter-spacing:5px;color:var(--accent);margin-bottom:16px;font-style:italic;">CONFIRMATION</div>
+      <p style="font-size:15px;color:var(--text);line-height:1.9;margin-bottom:28px;letter-spacing:1px;">
+        最初からやり直しますか?<br>
+        <span style="font-size:12px;color:var(--text-muted);">回答はすべてリセットされます</span>
+      </p>
+      <div style="display:flex;gap:10px;">
+        <button id="cm-cancel" style="flex:1;padding:12px;background:transparent;border:0.5px solid var(--border);color:var(--text);font-family:var(--font-mincho);font-size:12px;letter-spacing:3px;cursor:pointer;border-radius:2px;">CANCEL</button>
+        <button id="cm-ok" style="flex:1;padding:12px;background:rgba(147,197,253,0.1);border:0.5px solid var(--accent);color:var(--accent);font-family:var(--font-mincho);font-size:12px;letter-spacing:3px;cursor:pointer;border-radius:2px;">RESTART</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  document.getElementById('cm-cancel').addEventListener('click', () => overlay.remove());
+  document.getElementById('cm-ok').addEventListener('click', () => {
+    overlay.remove();
+    resetAll();
+  });
+  overlay.addEventListener('click', (e) => {
+    if(e.target === overlay) overlay.remove();
+  });
+}
+
+// 状態を完全リセット(location.reloadを使わない ・ file://でも確実)
+function resetAll(){
+  state.step = 1;
+  state.name = '';
+  state.birthdate = '';
+  state.age = null;
+  state.perspectives = [];
+  state.qIndex = 0;
+  state.questions = [];
+  state.answers = {};
+  document.getElementById('name').value = '';
+  document.getElementById('b-year').value = '';
+  document.getElementById('b-month').value = '';
+  document.getElementById('b-day').value = '';
+  document.getElementById('age-display').textContent = '';
+  document.querySelectorAll('.perspective').forEach(p => p.classList.remove('selected'));
+  document.getElementById('r-body').innerHTML = '';
+  goTo(1);
+}
+</script>
+
+</body>
+</html>
